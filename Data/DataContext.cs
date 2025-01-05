@@ -13,7 +13,7 @@ namespace SimpleMinimalAPI.Data
             optionsBuilder.UseNpgsql("Host=localhost;Database=minimal_db;Username=admin;Password=admin123;Port=5434");
         }
 
-        public DbSet<Student> Students { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 }
