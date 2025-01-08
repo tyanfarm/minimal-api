@@ -11,7 +11,7 @@ using SimpleMinimalAPI.Data;
 namespace SimpleMinimalAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250105111730_Add_User_Entity")]
+    [Migration("20250108034812_Add_User_Entity")]
     partial class Add_User_Entity
     {
         /// <inheritdoc />
@@ -36,7 +36,7 @@ namespace SimpleMinimalAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
 

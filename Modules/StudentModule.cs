@@ -6,7 +6,8 @@ namespace SimpleMinimalAPI.Modules
     {
         public static WebApplication MapStudentApi(this WebApplication app)
         {
-            var studentApi = app.MapGroup("/api/student");
+            var studentApi = app.MapGroup("/api/student").RequireAuthorization();
+            StudentCollection.Init();
 
             studentApi.MapGet("/list", () =>
             {

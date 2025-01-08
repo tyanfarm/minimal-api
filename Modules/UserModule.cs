@@ -9,7 +9,7 @@ namespace SimpleMinimalAPI.Modules
     {
         public static WebApplication MapUserApi(this WebApplication app)
         {
-            var userApi = app.MapGroup("/api/user");
+            var userApi = app.MapGroup("/api/user").RequireAuthorization(policy => policy.RequireRole("admin"));
 
             userApi.MapGet("list", async (DataContext context) =>
             {
@@ -21,13 +21,6 @@ namespace SimpleMinimalAPI.Modules
                 return await context.Users.FindAsync(id) is User user ?
                         Results.Ok(user) :
                         Results.NotFound("User not found !");
-            });
-
-            userApi.MapPost("", async (DataContext context, User user) =>
-            {
-                context.Users.Add(user);
-                await context.SaveChangesAsync();
-                return Results.Ok();
             });
 
             userApi.MapPut("{id}", async (DataContext context, User updatedUser, int id) =>

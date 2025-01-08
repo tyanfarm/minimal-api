@@ -1,6 +1,10 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using SimpleMinimalAPI.Data;
+using SimpleMinimalAPI.Helper;
+using SimpleMinimalAPI.Mapping;
+using SimpleMinimalAPI.Models;
 using SimpleMinimalAPI.Modules;
 using SimpleMinimalAPI.Services;
 
@@ -45,6 +49,15 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// Add AutoMapper
+builder.Services.AddAutoMapper(config =>
+{
+    config.AddProfile<MappingProfile>();
+});
+
+var appSettings = builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
+AppSettings.Initialize(appSettings);
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<DataContext>();
@@ -55,6 +68,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     options.TokenValidationParameters = JwtService.TokenValidationParameters;
                 });
 
+var emailService = new EmailService();
+await emailService.SendNotification(new MessageRequest
+{
+    Title = "Test",
+    Message = "Test"
+}, "phamquangtuyen.nt@gmail.com");
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 app.UseSwagger();
@@ -64,8 +86,10 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint(
 ));
 
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapStudentApi();
 app.MapUserApi();
+app.MapAuthApi();
 
 app.Run();
