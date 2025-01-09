@@ -1,6 +1,6 @@
 ﻿using SimpleMinimalAPI.Models;
 
-namespace SimpleMinimalAPI.Contracts
+namespace SimpleMinimalAPI.Contracts.Services
 {
     public interface INotificationService
     {

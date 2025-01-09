@@ -1,4 +1,4 @@
-﻿using SimpleMinimalAPI.Contracts;
+﻿using SimpleMinimalAPI.Contracts.Services;
 using SimpleMinimalAPI.Helper;
 using SimpleMinimalAPI.Models;
 using System.Net;

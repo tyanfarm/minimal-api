@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimpleMinimalAPI.Models;
 
-namespace SimpleMinimalAPI.Data
+namespace SimpleMinimalAPI.Config
 {
     public class DataContext : DbContext
     {

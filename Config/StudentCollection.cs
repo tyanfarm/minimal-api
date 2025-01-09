@@ -1,6 +1,6 @@
 ﻿using SimpleMinimalAPI.Models;
 
-namespace SimpleMinimalAPI.Data
+namespace SimpleMinimalAPI.Config
 {
     public static class StudentCollection
     {

@@ -1,4 +1,4 @@
-﻿using SimpleMinimalAPI.Data;
+﻿using SimpleMinimalAPI.Config;
 
 namespace SimpleMinimalAPI.Modules
 {

@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using SimpleMinimalAPI.Data;
+using SimpleMinimalAPI.Config;
 using SimpleMinimalAPI.DTOs;
 using SimpleMinimalAPI.Helper;
+using SimpleMinimalAPI.Messaging.Producer;
 using SimpleMinimalAPI.Models;
 using SimpleMinimalAPI.Services;
 
@@ -27,13 +28,16 @@ namespace SimpleMinimalAPI.Modules
                 return Results.Ok(token);
             });
 
-            authApi.MapPost("register", async (DataContext context, IMapper mapper, UserDTO userDto) =>
+            authApi.MapPost("register", 
+                async (DataContext context, IMapper mapper, EmailProducer producer, UserDTO userDto) =>
             {
                 var user = mapper.Map<User>(userDto);
 
                 context.Users.Add(user);
 
                 await context.SaveChangesAsync();
+
+                await producer.Publish(user);
 
                 return Results.Ok("User registered successfully !");
             });

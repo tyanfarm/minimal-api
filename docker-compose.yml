@@ -13,6 +13,17 @@ services:
             - ./document:/docker-entrypoint-initdb.d
         ports:
             - '5434:5432'
+    rabbitmq:
+        container_name: "rabbitmq"
+        image: rabbitmq:3.8-management-alpine
+        environment:
+            - RABBITMQ_DEFAULT_USER=user
+            - RABBITMQ_DEFAULT_PASS=mypass
+        ports:
+            # RabbitMQ Instance
+            - '5672:5672'
+            # Web interface
+            - '15672:15672'
 volumes:
     postgres_db:
         driver: local

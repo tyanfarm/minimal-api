@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using SimpleMinimalAPI.Data;
+using SimpleMinimalAPI.Config;
 using SimpleMinimalAPI.Models;
 
 namespace SimpleMinimalAPI.Modules

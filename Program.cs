@@ -1,10 +1,10 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
-using SimpleMinimalAPI.Data;
+using RabbitMQ.Client;
+using SimpleMinimalAPI.Config;
 using SimpleMinimalAPI.Helper;
 using SimpleMinimalAPI.Mapping;
-using SimpleMinimalAPI.Models;
+using SimpleMinimalAPI.Messaging.Producer;
 using SimpleMinimalAPI.Modules;
 using SimpleMinimalAPI.Services;
 
@@ -55,11 +55,27 @@ builder.Services.AddAutoMapper(config =>
     config.AddProfile<MappingProfile>();
 });
 
+// Add RabbitMQ
+builder.Services.AddSingleton<IConnectionFactory>(config =>
+{
+    var factory = new ConnectionFactory
+    {
+        HostName = "localhost",
+        UserName = "user",
+        Password = "mypass",
+        VirtualHost = "/",
+    };
+
+    return factory;
+});
+
+// Add AppSettings
 var appSettings = builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
 AppSettings.Initialize(appSettings);
 
 builder.Services.AddEndpointsApiExplorer();
 
+// Add DbContext
 builder.Services.AddDbContext<DataContext>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -68,12 +84,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     options.TokenValidationParameters = JwtService.TokenValidationParameters;
                 });
 
-var emailService = new EmailService();
-await emailService.SendNotification(new MessageRequest
-{
-    Title = "Test",
-    Message = "Test"
-}, "phamquangtuyen.nt@gmail.com");
+builder.Services.AddScoped<EmailProducer>();
 
 builder.Services.AddAuthorization();
 
