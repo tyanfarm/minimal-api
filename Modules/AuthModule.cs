@@ -37,7 +37,14 @@ namespace SimpleMinimalAPI.Modules
 
                 await context.SaveChangesAsync();
 
-                await producer.Publish(user);
+                // Create message
+                var message = new MessageRequest
+                {
+                    Title = "Welcome to our platform",
+                    Message = $"Hello {user.UserName}, you have successfully registered to our platform !"
+                };
+
+                await producer.Publish(new {EmailMessage = message, EmailDestination = user.Email});
 
                 return Results.Ok("User registered successfully !");
             });

@@ -4,6 +4,7 @@ using RabbitMQ.Client;
 using SimpleMinimalAPI.Config;
 using SimpleMinimalAPI.Helper;
 using SimpleMinimalAPI.Mapping;
+using SimpleMinimalAPI.Messaging.Consumer;
 using SimpleMinimalAPI.Messaging.Producer;
 using SimpleMinimalAPI.Modules;
 using SimpleMinimalAPI.Services;
@@ -49,6 +50,11 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddLogging(config =>
+{
+    config.AddConsole();
+});
+
 // Add AutoMapper
 builder.Services.AddAutoMapper(config =>
 {
@@ -84,7 +90,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     options.TokenValidationParameters = JwtService.TokenValidationParameters;
                 });
 
-builder.Services.AddScoped<EmailProducer>();
+builder.Services.AddSingleton<EmailProducer>();
+builder.Services.AddSingleton<EmailConsumer>();
+builder.Services.AddSingleton<EmailService>();
+
+// Background Services
+builder.Services.AddHostedService<EmailConsumerBackgroundService>();
 
 builder.Services.AddAuthorization();
 

@@ -2,6 +2,6 @@
 {
     public interface IConsumer
     {
-        void Consume();
+        Task Consume(CancellationToken cancellationToken);
     }
 }
